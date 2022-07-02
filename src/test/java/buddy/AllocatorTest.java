@@ -56,4 +56,12 @@ public class AllocatorTest {
 
         Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
     }
+
+    @Test
+    public void shouldThrowMemoryFullException() {
+        Allocator allocator = new Allocator();
+        allocator.alloc(1 << (allocator.getMaxSizeClass() - 1));
+
+        Assert.assertThrows("memory is full", RuntimeException.class, () -> allocator.alloc(1 << (allocator.getMaxSizeClass() - 1)));
+    }
 }
