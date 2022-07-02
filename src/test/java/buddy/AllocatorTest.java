@@ -64,12 +64,17 @@ public class AllocatorTest {
         int address2 = allocator.alloc(100);
 
         int[] freeBlocks1 = new int[allocator.getMaxSizeClass()];
+        freeBlocks1[allocator.getMaxSizeClass() - 1] = 1;
 
-        for (int i = 6; i < 15; i++) {
-            freeBlocks1[i] = 1;
-        }
-
+        allocator.free(address1);
         allocator.free(address2);
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+
+        int address3 = allocator.alloc(100);
+        int address4 = allocator.alloc(100);
+
+        allocator.free(address4);
+        allocator.free(address3);
         Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
     }
 
