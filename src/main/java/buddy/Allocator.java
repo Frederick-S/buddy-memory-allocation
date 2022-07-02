@@ -39,7 +39,6 @@ public class Allocator {
             }
 
             block = blockList.getFirst();
-            block.removeFromList();
             block = this.split(block, size);
             block.setUsed();
 
@@ -78,15 +77,13 @@ public class Allocator {
             sizeClass = newSizeClass;
         }
 
-        // block is splitted
-        if (sizeClass != oldSizeClass) {
-            block.removeFromList();
-        }
+        block.removeFromList();
 
         return block;
     }
 
     private Block[] splitToBuddies(Block block, int sizeClass) {
+        block.removeFromList();
         Block[] buddies = new Block[2];
 
         for (int i = 0; i < 2; i++) {
@@ -94,6 +91,9 @@ public class Allocator {
             buddies[i] = new Block(address, this.memory);
             buddies[i].setFree();
             buddies[i].setSizeClass(sizeClass);
+        }
+
+        for (int i = 1; i >= 0; i--) {
             this.blockLists[sizeClass - 1].insertFront(buddies[i]);
         }
 

@@ -18,6 +18,7 @@ public class BlockList {
         }
 
         this.head = new Block(address, memory);
+        this.head.setSizeClass(sizeClass);
         this.sizeClass = sizeClass;
     }
 
