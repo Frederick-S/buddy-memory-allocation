@@ -53,6 +53,20 @@ public class Allocator {
         return block.getUserAddress();
     }
 
+    public int[] getFreeBlocks() {
+        int[] freeBlocks = new int[MAX_SIZE_CLASS];
+
+        for (int i = 0; i < MAX_SIZE_CLASS; i++) {
+            freeBlocks[i] = this.blockLists[i].length();
+        }
+
+        return freeBlocks;
+    }
+
+    public int getMaxSizeClass() {
+        return MAX_SIZE_CLASS;
+    }
+
     private Block split(Block block, int size) {
         int oldSizeClass = block.getSizeClass();
         int sizeClass = block.getSizeClass();
