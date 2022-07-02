@@ -48,11 +48,11 @@ public class Block {
     }
 
     public void setSizeClass(int sizeClass) {
-        this.memory.setInt32(this.address + Constant.OFFSET_SIZE, sizeClass);
+        this.memory.setInt32(this.address + Constant.OFFSET_SIZE_CLASS, sizeClass);
     }
 
     public int getSizeClass() {
-        return this.memory.getInt32(this.address + Constant.OFFSET_SIZE);
+        return this.memory.getInt32(this.address + Constant.OFFSET_SIZE_CLASS);
     }
 
     public void setPrev(Block block) {

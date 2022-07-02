@@ -31,7 +31,7 @@ public class MemoryTest {
 
     @Test
     public void shouldCheckInvalidMemoryAddress() {
-        Memory memory = new Memory(10);
+        Memory memory = new Memory(2);
 
         Assert.assertThrows(IllegalArgumentException.class, () -> memory.getInt32(100));
         Assert.assertThrows(IllegalArgumentException.class, () -> memory.setInt32(1, 10));
