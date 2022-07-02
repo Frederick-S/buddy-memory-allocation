@@ -44,4 +44,16 @@ public class AllocatorTest {
         Assert.assertTrue(address1 > 0);
         Assert.assertNotEquals(address1, address2);
     }
+
+    @Test
+    public void shouldFreeMemory() {
+        Allocator allocator = new Allocator();
+        int address1 = allocator.alloc(100);
+        allocator.free(address1);
+
+        int[] freeBlocks1 = new int[allocator.getMaxSizeClass()];
+        freeBlocks1[allocator.getMaxSizeClass() - 1] = 1;
+
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+    }
 }

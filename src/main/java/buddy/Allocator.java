@@ -8,7 +8,7 @@ public class Allocator {
     private static final int MAX_SIZE_CLASS = 16;
 
     public Allocator() {
-        int allHeadSentinelSize = Constant.HEAD_SENTINEL_SIZE * MAX_SIZE_CLASS;
+        int allHeadSentinelSize = this.getMemoryOffset();
         int maxMemorySize = (1 << MAX_SIZE_CLASS) + allHeadSentinelSize;
         this.memory = new Memory(maxMemorySize);
         this.blockLists = new BlockList[MAX_SIZE_CLASS];
@@ -49,6 +49,36 @@ public class Allocator {
         }
 
         return block.getUserAddress();
+    }
+
+    public void free(int userAddress) {
+        Block block = Block.fromUserAddress(userAddress, this.memory);
+        block.setFree();
+
+        this.merge(block);
+    }
+
+    public void merge(Block block) {
+        int sizeClass = block.getSizeClass();
+
+        while (sizeClass < MAX_SIZE_CLASS) {
+            Block buddy = this.getBuddy(block, sizeClass);
+
+            if (buddy.isUsed() || buddy.getSizeClass() != sizeClass) {
+                break;
+            }
+
+            buddy.removeFromList();
+
+            if (block.getAddress() > buddy.getAddress()) {
+                block = buddy;
+            }
+
+            sizeClass += 1;
+        }
+
+        block.setSizeClass(sizeClass);
+        this.blockLists[sizeClass - 1].insertFront(block);
     }
 
     public int[] getFreeBlocks() {
@@ -96,5 +126,17 @@ public class Allocator {
         }
 
         return buddies;
+    }
+
+    private Block getBuddy(Block block, int sizeClass) {
+        int virtualAddress = block.getAddress() - this.getMemoryOffset();
+        int buddyVirtualAddress = virtualAddress ^ (1 << sizeClass);
+        int buddyAddress = buddyVirtualAddress + this.getMemoryOffset();
+
+        return new Block(buddyAddress, this.memory);
+    }
+
+    private int getMemoryOffset() {
+        return Constant.HEAD_SENTINEL_SIZE * MAX_SIZE_CLASS;
     }
 }
