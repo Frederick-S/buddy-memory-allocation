@@ -1,1 +1,1 @@
-# buddy-memory-allocation
+# buddy-memory-allocation [![Java CI with Maven](https://github.com/Frederick-S/buddy-memory-allocation/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/Frederick-S/buddy-memory-allocation/actions/workflows/maven.yml)
