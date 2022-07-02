@@ -15,8 +15,6 @@ public class Allocator {
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
             int sizeClass = i + 1;
-
-            // We only need prev/next address for head sentinel
             int headSentinelAddress = Constant.HEAD_SENTINEL_SIZE * i;
             this.blockLists[i] = new BlockList(headSentinelAddress, this.memory, sizeClass);
             this.blockLists[i].clear();
@@ -25,6 +23,7 @@ public class Allocator {
         // The single full block
         Block block = new Block(allHeadSentinelSize, this.memory);
         block.setSizeClass(MAX_SIZE_CLASS);
+        block.setFree();
         this.blockLists[MAX_SIZE_CLASS - 1].insertFront(block);
     }
 
@@ -61,6 +60,8 @@ public class Allocator {
             block = buddies[0];
             sizeClass = newSizeClass;
         }
+
+        block.removeFromList();
 
         return block;
     }

@@ -59,20 +59,28 @@ public class Block {
         this.memory.setInt32(this.address + Constant.OFFSET_PREV, block.getAddress());
     }
 
+    public void resetPrev() {
+        this.memory.setInt32(this.address + Constant.OFFSET_PREV, -1);
+    }
+
     public Block getPrev() {
         int address = this.memory.getInt32(this.address + Constant.OFFSET_PREV);
 
-        return new Block(address, this.memory);
+        return address == -1 ? null : new Block(address, this.memory);
     }
 
     public void setNext(Block block) {
         this.memory.setInt32(this.address + Constant.OFFSET_NEXT, block.address);
     }
 
+    public void resetNext() {
+        this.memory.setInt32(this.address + Constant.OFFSET_NEXT, -1);
+    }
+
     public Block getNext() {
         int address = this.memory.getInt32(this.address + Constant.OFFSET_NEXT);
 
-        return new Block(address, this.memory);
+        return address == -1 ? null : new Block(address, this.memory);
     }
 
     public void insertAfter(Block block) {
@@ -88,6 +96,12 @@ public class Block {
         Block prevBlock = getPrev();
         prevBlock.setNext(nextBlock);
         nextBlock.setPrev(prevBlock);
+        resetPrev();
+        resetNext();
+    }
+
+    public int getAddress() {
+        return address;
     }
 
     @Override
@@ -110,7 +124,13 @@ public class Block {
         return Objects.hash(address);
     }
 
-    public int getAddress() {
-        return address;
+    @Override
+    public String toString() {
+        boolean used = this.isUsed();
+        int sizeClass = this.getSizeClass();
+        int prevAddress = this.getPrev() == null ? -1 : this.getPrev().getAddress();
+        int nextAddress = this.getNext() == null ? -1 : this.getNext().getAddress();
+
+        return String.format("address: %d, isUsed: %b, sizeClass: %d, prevAddress: %d, nextAddress: %d", this.address, used, sizeClass, prevAddress, nextAddress);
     }
 }
