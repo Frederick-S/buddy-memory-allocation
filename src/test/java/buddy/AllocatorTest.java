@@ -29,6 +29,18 @@ public class AllocatorTest {
 
         int address2 = allocator.alloc(100);
         Assert.assertArrayEquals(freeBlocks2, allocator.getFreeBlocks());
+
+        int[] freeBlocks3 = new int[allocator.getMaxSizeClass()];
+
+        for (int i = 7; i < 15; i++) {
+            freeBlocks3[i] = 1;
+        }
+
+        freeBlocks3[11] = 0;
+
+        allocator.alloc(4000);
+        Assert.assertArrayEquals(freeBlocks3, allocator.getFreeBlocks());
+
         Assert.assertTrue(address1 > 0);
         Assert.assertNotEquals(address1, address2);
     }

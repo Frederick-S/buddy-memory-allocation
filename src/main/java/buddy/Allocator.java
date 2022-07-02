@@ -32,9 +32,8 @@ public class Allocator {
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
             BlockList blockList = this.blockLists[i];
-            int sizeClass = i + 1;
 
-            if (blockList.isEmpty() || Block.getActualSize(sizeClass) < size) {
+            if (!blockList.hasAvailableBlock(size)) {
                 continue;
             }
 
@@ -67,7 +66,6 @@ public class Allocator {
     }
 
     private Block split(Block block, int size) {
-        int oldSizeClass = block.getSizeClass();
         int sizeClass = block.getSizeClass();
 
         while (sizeClass > MIN_SIZE_CLASS && Block.getActualSize(sizeClass - 1) >= size) {
