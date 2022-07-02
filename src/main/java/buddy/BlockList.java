@@ -6,14 +6,18 @@ public class BlockList {
     private final Block head;
     private final int sizeClass;
 
-    public BlockList(Block head, int sizeClass) {
-        Objects.requireNonNull(head, "head cannot be null");
+    public BlockList(int address, Memory memory, int sizeClass) {
+        if (address < 0 || address >= memory.getSize()) {
+            throw new IllegalArgumentException("invalid address");
+        }
+
+        Objects.requireNonNull(memory, "memory cannot be null");
 
         if (sizeClass <= 0) {
             throw new IllegalArgumentException("invalid sizeClass");
         }
 
-        this.head = head;
+        this.head = new Block(address, memory);
         this.sizeClass = sizeClass;
     }
 
