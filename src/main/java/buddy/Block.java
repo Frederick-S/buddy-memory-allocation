@@ -7,17 +7,19 @@ public class Block {
     private final Memory memory;
 
     public Block(int address, Memory memory) {
+        Objects.requireNonNull(memory, "memory should not be null");
+
         if (address < 0 || address >= memory.getSize()) {
             throw new IllegalArgumentException("invalid address");
         }
-
-        Objects.requireNonNull(memory, "memory should not be null");
 
         this.address = address;
         this.memory = memory;
     }
 
     public static Block fromUserAddress(int userAddress, Memory memory) {
+        Objects.requireNonNull(memory, "memory should not be null");
+
         int address = userAddress - Constant.OFFSET_ACTUAL_MEMORY;
 
         if (address < 0 || address >= memory.getSize()) {
