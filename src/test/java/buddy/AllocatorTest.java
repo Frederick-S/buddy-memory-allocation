@@ -58,6 +58,22 @@ public class AllocatorTest {
     }
 
     @Test
+    public void shouldCheckIfBuddyBlockCanBeMerged() {
+        Allocator allocator = new Allocator();
+        int address1 = allocator.alloc(100);
+        int address2 = allocator.alloc(100);
+
+        int[] freeBlocks1 = new int[allocator.getMaxSizeClass()];
+
+        for (int i = 6; i < 15; i++) {
+            freeBlocks1[i] = 1;
+        }
+
+        allocator.free(address2);
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+    }
+
+    @Test
     public void shouldThrowMemoryFullException() {
         Allocator allocator = new Allocator();
         allocator.alloc(1 << (allocator.getMaxSizeClass() - 1));
