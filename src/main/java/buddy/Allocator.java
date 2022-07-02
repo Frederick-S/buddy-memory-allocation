@@ -42,6 +42,8 @@ public class Allocator {
             block.removeFromList();
             block = this.split(block, size);
             block.setUsed();
+
+            break;
         }
 
         if (block == null) {
@@ -52,6 +54,7 @@ public class Allocator {
     }
 
     private Block split(Block block, int size) {
+        int oldSizeClass = block.getSizeClass();
         int sizeClass = block.getSizeClass();
 
         while (sizeClass > MIN_SIZE_CLASS && Block.getActualSize(sizeClass - 1) >= size) {
@@ -61,7 +64,10 @@ public class Allocator {
             sizeClass = newSizeClass;
         }
 
-        block.removeFromList();
+        // block is splitted
+        if (sizeClass != oldSizeClass) {
+            block.removeFromList();
+        }
 
         return block;
     }

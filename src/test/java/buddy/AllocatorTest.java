@@ -14,8 +14,10 @@ public class AllocatorTest {
 
     @Test
     public void shouldAllocMemory() {
-        int address = allocator.alloc(100);
+        int address1 = allocator.alloc(100);
+        int address2 = allocator.alloc(100);
 
-        Assert.assertTrue(address > 0);
+        Assert.assertTrue(address1 > 0);
+        Assert.assertNotEquals(address1, address2);
     }
 }
