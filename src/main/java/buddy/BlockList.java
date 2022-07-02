@@ -7,11 +7,11 @@ public class BlockList {
     private final int sizeClass;
 
     public BlockList(int address, Memory memory, int sizeClass) {
+        Objects.requireNonNull(memory, "memory cannot be null");
+
         if (address < 0 || address >= memory.getSize()) {
             throw new IllegalArgumentException("invalid address");
         }
-
-        Objects.requireNonNull(memory, "memory cannot be null");
 
         if (sizeClass <= 0) {
             throw new IllegalArgumentException("invalid sizeClass");
