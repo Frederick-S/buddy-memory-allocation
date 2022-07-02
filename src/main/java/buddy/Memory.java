@@ -46,6 +46,10 @@ public class Memory {
         return ByteBuffer.wrap(bytes).getInt();
     }
 
+    public int getSize() {
+        return this.memory.length;
+    }
+
     private void setByteArray(int address, byte[] bytes) {
         checkAddress(address);
 
