@@ -24,3 +24,5 @@ jobs:
         cache: maven
     - name: Test with Maven
       run: mvn test
+    - name: Upload coverage report to codecov
+      run: bash <(curl -s https://codecov.io/bash)
