@@ -2,7 +2,7 @@ package buddy;
 
 public class Allocator {
     private final Memory memory;
-    private final BlockList[] blockLists;
+    private final BlockList[] freeBlockLists;
 
     private static final int MIN_SIZE_CLASS = 4;
     private static final int MAX_SIZE_CLASS = 16;
@@ -11,27 +11,27 @@ public class Allocator {
         int allHeadSentinelSize = this.getMemoryOffset();
         int maxMemorySize = (1 << MAX_SIZE_CLASS) + allHeadSentinelSize;
         this.memory = new Memory(maxMemorySize);
-        this.blockLists = new BlockList[MAX_SIZE_CLASS];
+        this.freeBlockLists = new BlockList[MAX_SIZE_CLASS];
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
             int sizeClass = i + 1;
             int headSentinelAddress = Constant.HEAD_SENTINEL_SIZE * i;
-            this.blockLists[i] = new BlockList(headSentinelAddress, this.memory, sizeClass);
-            this.blockLists[i].clear();
+            this.freeBlockLists[i] = new BlockList(headSentinelAddress, this.memory, sizeClass);
+            this.freeBlockLists[i].clear();
         }
 
         // The single full block
         Block block = new Block(allHeadSentinelSize, this.memory);
         block.setSizeClass(MAX_SIZE_CLASS);
         block.setFree();
-        this.blockLists[MAX_SIZE_CLASS - 1].insertFront(block);
+        this.freeBlockLists[MAX_SIZE_CLASS - 1].insertFront(block);
     }
 
     public int alloc(int size) {
         Block block = null;
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
-            BlockList blockList = this.blockLists[i];
+            BlockList blockList = this.freeBlockLists[i];
 
             if (!blockList.hasAvailableBlock(size)) {
                 continue;
@@ -78,14 +78,14 @@ public class Allocator {
         }
 
         block.setSizeClass(sizeClass);
-        this.blockLists[sizeClass - 1].insertFront(block);
+        this.freeBlockLists[sizeClass - 1].insertFront(block);
     }
 
     public int[] getFreeBlocks() {
         int[] freeBlocks = new int[MAX_SIZE_CLASS];
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
-            freeBlocks[i] = this.blockLists[i].length();
+            freeBlocks[i] = this.freeBlockLists[i].length();
         }
 
         return freeBlocks;
@@ -122,7 +122,7 @@ public class Allocator {
         }
 
         for (int i = 1; i >= 0; i--) {
-            this.blockLists[sizeClass - 1].insertFront(buddies[i]);
+            this.freeBlockLists[sizeClass - 1].insertFront(buddies[i]);
         }
 
         return buddies;
