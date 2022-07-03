@@ -17,6 +17,9 @@ public class Block {
         this.memory = memory;
     }
 
+    /**
+     * Get a block from userAddress.
+     */
     public static Block fromUserAddress(int userAddress, Memory memory) {
         Objects.requireNonNull(memory, "memory should not be null");
 
@@ -29,6 +32,9 @@ public class Block {
         return new Block(address, memory);
     }
 
+    /**
+     * Get actual size that user can use within a block.
+     */
     public static int getActualSize(int sizeClass) {
         return (1 << sizeClass) - Constant.OFFSET_ACTUAL_MEMORY;
     }
@@ -85,6 +91,9 @@ public class Block {
         return address == -1 ? null : new Block(address, this.memory);
     }
 
+    /**
+     * Insert block after current block.
+     */
     public void insertAfter(Block block) {
         Block nextBlock = getNext();
         setNext(block);
@@ -93,6 +102,9 @@ public class Block {
         block.setNext(nextBlock);
     }
 
+    /**
+     * Remove current block from the doubly linked list.
+     */
     public void removeFromList() {
         Block nextBlock = getNext();
         Block prevBlock = getPrev();

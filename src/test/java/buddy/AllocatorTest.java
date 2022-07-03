@@ -10,7 +10,7 @@ public class AllocatorTest {
         int[] initFreeBlocks = new int[allocator.getMaxSizeClass()];
         initFreeBlocks[allocator.getMaxSizeClass() - 1] = 1;
 
-        Assert.assertArrayEquals(initFreeBlocks, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(initFreeBlocks, allocator.getFreeBlocksCount());
 
         int[] freeBlocks1 = new int[allocator.getMaxSizeClass()];
 
@@ -19,7 +19,7 @@ public class AllocatorTest {
         }
 
         int address1 = allocator.alloc(100);
-        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocksCount());
 
         int[] freeBlocks2 = new int[allocator.getMaxSizeClass()];
 
@@ -28,7 +28,7 @@ public class AllocatorTest {
         }
 
         int address2 = allocator.alloc(100);
-        Assert.assertArrayEquals(freeBlocks2, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks2, allocator.getFreeBlocksCount());
 
         int[] freeBlocks3 = new int[allocator.getMaxSizeClass()];
 
@@ -39,7 +39,7 @@ public class AllocatorTest {
         freeBlocks3[11] = 0;
 
         allocator.alloc(4000);
-        Assert.assertArrayEquals(freeBlocks3, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks3, allocator.getFreeBlocksCount());
 
         Assert.assertTrue(address1 > 0);
         Assert.assertNotEquals(address1, address2);
@@ -54,7 +54,7 @@ public class AllocatorTest {
         int[] freeBlocks1 = new int[allocator.getMaxSizeClass()];
         freeBlocks1[allocator.getMaxSizeClass() - 1] = 1;
 
-        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocksCount());
     }
 
     @Test
@@ -68,14 +68,14 @@ public class AllocatorTest {
 
         allocator.free(address1);
         allocator.free(address2);
-        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocksCount());
 
         int address3 = allocator.alloc(100);
         int address4 = allocator.alloc(100);
 
         allocator.free(address4);
         allocator.free(address3);
-        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocks());
+        Assert.assertArrayEquals(freeBlocks1, allocator.getFreeBlocksCount());
     }
 
     @Test

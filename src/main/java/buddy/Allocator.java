@@ -13,6 +13,7 @@ public class Allocator {
         this.memory = new Memory(maxMemorySize);
         this.freeBlockLists = new BlockList[MAX_SIZE_CLASS];
 
+        // Init all doubly linked list, each attached with a sentinel head node
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
             int sizeClass = i + 1;
             int headSentinelAddress = Constant.HEAD_SENTINEL_SIZE * i;
@@ -81,7 +82,10 @@ public class Allocator {
         this.freeBlockLists[sizeClass - 1].insertFront(block);
     }
 
-    public int[] getFreeBlocks() {
+    /**
+     * Get length of the doubly linked list under each sizeClass, the sentinel head is not counted.
+     */
+    public int[] getFreeBlocksCount() {
         int[] freeBlocks = new int[MAX_SIZE_CLASS];
 
         for (int i = 0; i < MAX_SIZE_CLASS; i++) {
