@@ -1,1 +1,2 @@
 # buddy-memory-allocation [![Java CI with Maven](https://github.com/Frederick-S/buddy-memory-allocation/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/Frederick-S/buddy-memory-allocation/actions/workflows/maven.yml) [![codecov](https://codecov.io/gh/Frederick-S/buddy-memory-allocation/branch/main/graph/badge.svg?token=N73MEA3XQR)](https://codecov.io/gh/Frederick-S/buddy-memory-allocation)
+Demo code of [Buddy Memory Allocation](https://frederick-s.github.io/2022/07/03/buddy-memory-allocation/).
